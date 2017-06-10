@@ -1,5 +1,5 @@
 FROM m3adow/ubuntu_dumb-init_gosu:latest
-MAINTAINER Carl Mercier <foss@carlmercier.com>
+MAINTAINER Daniel Mahlberg <daniel.mahlberg@gmail.com>
 
 COPY ["install.sh", "/tmp/"]
 COPY ["download.sh", "/usr/local/bin/"]
