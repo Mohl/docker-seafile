@@ -8,7 +8,7 @@ Seafile Community or Professional Edition Docker container based on Ubuntu
 * Auto-setup at initial run
 * Allows usage of Community or Professional Edition
 
-### Quickstart
+### Quickstart Community Edition
 
 If you want to run with SQLite:
 ```bash
@@ -32,6 +32,34 @@ docker run -d -e SEAFILE_NAME=Seaflail \
     -v /home/data/seafile:/seafile \
   cmer/seafile
 ```
+
+### Quickstart Professional Edition
+
+Start by setting up a temporary Community Edition Seafile:
+```bash
+docker run -d -e SEAFILE_NAME=Seafile_setup \
+    -e SEAFILE_ADDRESS=seafile.example.org \
+    -e SEAFILE_ADMIN=seafile@example.org \
+    -e SEAFILE_ADMIN_PW=LoremIpsum \
+    -e FORCE_PERMISSIONS=true
+    -v /path/to/seafile:/seafile \
+    -v /path/to/logs:/opt/haiwen/logs
+  danielmohl/docker-seafile
+```
+This will generate the files and folders needed and speeds up the setup process. After that, stop the container (you can delete it when everything is up & running) and start the pro container:
+```bash
+docker run -d -e SEAFILE_NAME=Seafile \
+    -e SEAFILE_ADDRESS=seafile.example.org \
+    -e SEAFILE_ADMIN=seafile@example.org \
+    -e SEAFILE_ADMIN_PW=LoremIpsum \
+    -e PRO=true
+    -v /path/to/seafile:/seafile \
+    -v /path/to/logs:/opt/haiwen/logs
+  danielmohl/docker-seafile
+```
+The first start will fail, but correctly convert your community edition installation to pro edition.
+
+Don't forget to double check the settings in System-Administration after login!
 
 ### Overview
 
