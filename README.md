@@ -64,7 +64,7 @@ Don't forget to double check the settings in System-Administration after login!
 ### Overview
 
 Filetree:
-
+```
 /seafile/
 |-- ccnet
 |-- conf
@@ -80,7 +80,7 @@ Filetree:
     |-- seafile-server-5.1.3
     |-- seafile-server-latest -> seafile-server-5.1.3
     `-- seahub-data -> /seafile/seahub-data
-
+```
 All important data is stored under /seafile, so you should be mounting a volume there (recommended) or at the respective subdirectories. This will not happen automatically!
 There are a plethora of environment variables which might be needed for your setup. I recommend using Dockers `--env-file` option.
 
@@ -124,6 +124,22 @@ For further instructions, see [Migrate from Seafile Community Server](https://ma
 This container does not include a web server. It's intended to be run behind a reverse proxy. You can read more about that in the Seafile manual: http://manual.seafile.com/deploy/
 
 If you want to run seahub in fastcgi mode, you can pass ENV variables **SEAFILE_FASTCGI=1** and **SEAFILE_FASTCGI_HOST=0.0.0.0**
+
+if you want to use this container with jwilder's nginx-gen and jrcs' letsencrypt-nginx-docker-companion, you have to mount a volume nginx's vhost.d folder and create a file called `seafile.example.com_location` (correct filename according to your settings) with the following content:
+
+```nginx
+location /seafhttp {
+        rewrite ^/seafhttp(.*)$ $1 break;
+        proxy_pass <REPLACE_WITH_CONTAINER_IP - eg 172.17.0.2>:8082;
+        client_max_body_size 0;
+        proxy_connect_timeout  36000s;
+        proxy_read_timeout  36000s;
+        proxy_send_timeout  36000s;
+        send_timeout  36000s;
+    }
+```
+You have to keep this file up to date manually, so if the container IP address changes, seafile won't be working until you correct this entry.
+
 ### Credits
 
 Special thanks to [Till Wiese](https://github.com/m3adow). This container is a fork of his work. He deserves all the credit.
